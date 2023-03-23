@@ -76,3 +76,23 @@ O sistema utiliza um banco de dados SQLite para armazenar os dados do arquivo CN
 ## Documentação da API
 
 Para acessar as rotas e a documentação da API é só acessar a pagina: http://localhost:8000/docs
+
+## Testes Unitários
+
+Para executar esses testes a partir do terminal, execute abaixo para executar os testes:
+```bash
+pytest <nome_do_arquivo_de_teste>
+```
+todos os testes estão dentro da pasta tests do repositório, execute os demais testes conforme necessidade, segue:
+```bash
+test_banco.py
+```
+```bash
+test_criar_arquivo.py
+```
+```bash
+test_ler_dados.py
+```
+```bash
+test_ler_raiz.py
+```

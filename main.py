@@ -9,7 +9,7 @@ from utils.formatar_data import FormatarData as fdt
 app = FastAPI()
 
 # Conecta ao banco de dados
-conn = sqlite3.connect('cnab.db')
+conn = sqlite3.connect('cnab.db', check_same_thread=False)
 c = conn.cursor()
 
 
@@ -85,6 +85,10 @@ async def read_data():
 		}
 		th {
 			background-color: #ddd;
+            border: 1px solid black;
+		}
+        td{
+			border: 1px solid black;
 		}
 	</style>
 </head>
@@ -105,13 +109,25 @@ async def read_data():
 
     '''
     # content += "<tr><th>Tipo</th><th>Data</th><th>Valor</th><th>CPF</th><th>Cartão</th><th>Hora</th><th>Nome do Dono da Loja</th><th>Nome da Loja</th></tr>"
+    vlr_total = 0.00
+    cont = 0
     for row in data:
-        content += f'''<tr>
-                    <td>{row[0]}</td><td>{fdt.data_cnab(row[1])}</td><td style="text-align:right;">{row[2]}</td><td>{fcpf.formata_cpf(row[3])}</td><td>{row[4]}</td><td>{row[5]}</td><td>{row[6]}</td><td>{row[7]}</td></tr>'''
-    content += '''	</table>
-</body>
-</html>
-'''
+        content += f'''<tr><td>{row[0]}</td><td>{fdt.data_cnab(row[1])}</td><td style="text-align:right;">{str("{:0,.2f}".format(float(row[2])))}</td><td>{fcpf.formata_cpf(row[3])}</td><td>{row[4]}</td><td>{row[5]}</td><td>{row[6]}</td><td>{row[7]}</td></tr>'''
+        cont = cont + 1
+        vlr_total = vlr_total + float(row[2])
+    
+    content += f'''<tr>
+                    <th colspan="3" style="font-size: 20px; text-align: center;">Qtd</th>
+                    <th colspan="5" style="font-size: 20px; text-align: center;">Total CNAB</th>
+                   </tr>
+                   <tr>
+                    <td colspan="3" style="font-size: 20px; text-align: center;">{cont}</td>
+                    <td colspan="5" style="font-size: 20px; text-align: center;">{str("{:0,.2f}".format(float(vlr_total)))} R$</td>
+                   </tr>'''
+    content += '''	</table>   
+                </body>
+               </html>
+               '''
 
     return HTMLResponse(content=content)
 

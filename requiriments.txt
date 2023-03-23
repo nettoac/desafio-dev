@@ -1,3 +1,4 @@
 fastapi
 pysqlite
 uvicorn
+pytest
